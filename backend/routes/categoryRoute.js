@@ -20,7 +20,7 @@ router.post('/categories', (req, res) => {
 
   db.query(sql, [name, description, created_by], (err, result) => {
     if (err) {
-      console.error('❌ Failed to insert category:', err);
+      console.error('Failed to insert category:', err);
       return res.status(500).json({ message: 'Database error' });
     }
 
@@ -39,5 +39,61 @@ router.post('/categories', (req, res) => {
     res.status(201).json({ message: 'Category created', category });
   });
 });
+router.put('/categories/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, description } = req.body;
 
+  if (!name) {
+    return res.status(400).json({ message: 'Category name is required' });
+  }
+
+  const sql = `UPDATE categories SET name = ?, description = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+
+  db.query(sql, [name, description, id], (err, result) => {
+    if (err) {
+      console.error('Failed to update category:', err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    // Updated successfully
+    const updatedCategory = {
+      id: parseInt(id),
+      name,
+      description,
+      updated_at: new Date().toISOString()
+    };
+
+    // 🔄 Update the JSON file (overwrite category by ID)
+    const { updateJsonById } = require('../stores/saveJson');
+    updateJsonById('../DB/db.json', updatedCategory, 'categories');
+
+    res.status(200).json({ message: 'Category updated', category: updatedCategory });
+  });
+});
+router.delete('/categories/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = `DELETE FROM categories WHERE id = ?`;
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Failed to delete category:', err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    // Remove from JSON
+    const { deleteJsonById } = require('../stores/saveJson');
+    deleteJsonById('db.json', parseInt(id), 'categories');
+
+    res.status(200).json({ message: 'Category deleted' });
+  });
+});
 module.exports = router;

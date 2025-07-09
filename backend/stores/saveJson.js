@@ -26,6 +26,34 @@ function saveData(fileName, newData, key) {
     console.log(`${key} saved to ${fileName}`);
   }
 }
+function updateJsonById(fileName, updatedData, key) {
+  const filePath = path.join(__dirname, '../DB/' + fileName);
+
+  let existing = {};
+  if (fs.existsSync(filePath)) {
+    try {
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      existing = JSON.parse(raw || '{}');
+    } catch (e) {
+      console.error('Error parsing JSON:', e);
+    }
+  }
+
+  if (!Array.isArray(existing[key])) {
+    existing[key] = [];
+  }
+
+  const index = existing[key].findIndex(item => item.id === updatedData.id);
+  if (index !== -1) {
+    existing[key][index] = { ...existing[key][index], ...updatedData };
+  } else {
+    existing[key].push(updatedData);
+  }
+
+  fs.writeFileSync(filePath, JSON.stringify(existing, null, 2), 'utf-8');
+  console.log(`✅ ${key} with ID ${updatedData.id} updated in ${fileName}`);
+}
+
 function saveAllToJson() {
   let users = [], roles = [], profiles = [], categories = [];
 
@@ -56,5 +84,26 @@ function saveAllToJson() {
     });
   });
 }
+function deleteJsonById(fileName, idToDelete, key) {
+  const filePath = path.join(__dirname, '../DB/' + fileName);
 
-module.exports = { saveData,saveAllToJson };
+  let existing = {};
+  if (fs.existsSync(filePath)) {
+    try {
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      existing = JSON.parse(raw || '{}');
+    } catch (e) {
+      console.error('Error reading JSON:', e);
+    }
+  }
+
+  if (!Array.isArray(existing[key])) return;
+
+  existing[key] = existing[key].filter(item => item.id !== idToDelete);
+
+  fs.writeFileSync(filePath, JSON.stringify(existing, null, 2), 'utf-8');
+  console.log(`🗑️ Deleted ${key} ID ${idToDelete} from ${fileName}`);
+}
+
+module.exports = { saveData, saveAllToJson, updateJsonById, deleteJsonById };
+
