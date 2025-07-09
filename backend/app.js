@@ -1,0 +1,29 @@
+const express = require('express');
+const app = express();
+const port = 5000;
+require('./models/userModel');
+app.use(express.json()); 
+const session = require('express-session');
+app.use(express.urlencoded({ extended: true })); 
+const cors = require('cors');
+app.use(session({
+  secret: 'mySecretKey',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    httpOnly: true
+  }
+}));
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  credentials: true              
+}));
+
+const user = require('./routes/userRoute');
+const product = require('./routes/productRoute');
+app.use('/api', user);
+app.use('/api', product);
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});

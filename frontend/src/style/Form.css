@@ -1,0 +1,185 @@
+/* Cartoon background */
+.login-bg-cartoon {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffeaa7, #fab1a0, #a29bfe);
+  background-size: 300% 300%;
+  animation: backgroundShift 10s ease infinite;
+  padding: 30px;
+}
+
+/* Card with cartoon style */
+.login-card-cartoon {
+  background-color: #fffaf1;
+  border: 4px dashed #f78fb3;
+  border-radius: 30px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.8s ease forwards;
+}
+
+/* Logo image */
+.logo-cartoon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #f8c291;
+  padding: 10px;
+}
+
+/* Text styles */
+.login-title-cartoon {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  color: #2d3436;
+  font-size: 24px;
+}
+
+.login-subtitle-cartoon {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  color: #636e72;
+  font-size: 14px;
+}
+
+/* Inputs */
+.cartoon-input {
+  border: 2px solid #fab1a0;
+  background-color: #fdfdfd;
+  padding: 12px;
+  font-family: 'Comic Sans MS';
+  color: #2d3436;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Button */
+.btn-cartoon {
+  background-color: #f78fb3;
+  color: white;
+  font-weight: bold;
+  font-family: 'Comic Sans MS';
+  padding: 12px;
+  border: none;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-cartoon:hover {
+  background-color: #fd79a8;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes backgroundShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Background */
+.register-bg-cartoon {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a29bfe, #f8c291, #81ecec);
+  background-size: 300% 300%;
+  animation: backgroundShift 10s ease infinite;
+  padding: 30px;
+}
+
+/* Card */
+.register-card-cartoon {
+  background-color: #fffaf1;
+  border: 4px dotted #74b9ff;
+  border-radius: 30px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  animation: popIn 0.8s ease forwards;
+}
+
+/* Logo */
+.logo-cartoon {
+  width: 90px;
+  height: 90px;
+  background-color: #ffeaa7;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+/* Text styles */
+.register-title-cartoon {
+  font-family: 'Comic Sans MS', cursive;
+  color: #2d3436;
+  font-size: 24px;
+}
+
+.register-subtitle-cartoon {
+  font-family: 'Comic Sans MS', cursive;
+  color: #636e72;
+  font-size: 14px;
+}
+
+/* Inputs */
+.cartoon-input {
+  border: 2px solid #74b9ff;
+  background-color: #ffffff;
+  padding: 12px;
+  font-family: 'Comic Sans MS';
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Button */
+.btn-cartoon {
+  background-color: #74b9ff;
+  color: white;
+  font-weight: bold;
+  font-family: 'Comic Sans MS';
+  padding: 12px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-cartoon:hover {
+  background-color: #0984e3;
+  transform: scale(1.05);
+}
+
+/* Animation */
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes backgroundShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
