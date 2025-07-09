@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import Sidebar from '../layout/Sidebar'; // adjust path if needed
+
 
 function Dashboard() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="container mt-5">
-      <h2>🎉 Welcome to the Dashboard</h2>
-      <p><strong>ID:</strong> {user.id}</p>
-      <p><strong>Username:</strong> {user.username}</p>
-      <p><strong>Role:</strong> {user.role}</p>
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar />
+      <main style={{ flex: 1, padding: '20px' }}>
+        <Outlet /> {/* This will render child route like Dashboard, Add, etc. */}
+      </main>
     </div>
   );
 }
-
 export default Dashboard;

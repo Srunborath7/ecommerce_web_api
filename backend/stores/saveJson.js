@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-
+const db = require('../connection/connection');
 function saveData(fileName, newData, key) {
   const filePath = path.join(__dirname, fileName);
 
@@ -27,31 +27,31 @@ function saveData(fileName, newData, key) {
   }
 }
 function saveAllToJson() {
-  db.query('SELECT * FROM users', (err1, users) => {
-    if (err1) return console.error('Failed to fetch users:', err1);
-    console.log('Users fetched:', users.length);
+  let users = [], roles = [], profiles = [], categories = [];
 
-    db.query('SELECT * FROM roles', (err2, roles) => {
-      if (err2) return console.error('Failed to fetch roles:', err2);
-      console.log('Roles fetched:', roles.length);
+  db.query('SELECT * FROM users', (e1, r1) => {
+    if (!e1) users = r1;
 
-      db.query('SELECT * FROM user_profiles', (err3, profiles) => {
-        if (err3) return console.error('Failed to fetch profiles:', err3);
-        console.log('Profiles fetched:', profiles.length);
+    db.query('SELECT * FROM roles', (e2, r2) => {
+      if (!e2) roles = r2;
 
-        const data = {
-          users,
-          roles,    
-          profiles
-        };
+      db.query('SELECT * FROM user_profiles', (e3, r3) => {
+        if (!e3) profiles = r3;
 
-        const filePath = path.join(__dirname, '../DB/db.json');
-        try {
-          fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-          console.log('db.json saved successfully');
-        } catch (writeErr) {
-          console.error('Failed to write db.json:', writeErr);
-        }
+        db.query('SELECT * FROM categories', (e4, r4) => {
+          if (!e4) categories = r4;
+
+          const backup = {
+            users,
+            role: roles,
+            profile: profiles,
+            categories
+          };
+
+          const filePath = path.join(__dirname, '../DB/db.json');
+          fs.writeFileSync(filePath, JSON.stringify(backup, null, 2), 'utf-8');
+          console.log('📁 db.json saved successfully');
+        });
       });
     });
   });

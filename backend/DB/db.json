@@ -3,23 +3,14 @@
     {
       "id": 1,
       "username": "admin",
-      "password": "$2b$10$5m01aj7DOK2/2d6P1fvgnuWz4IjcMpZ2fxNvtpjrTijvESHGaWB1O",
+      "password": "$2b$10$5Yupdnwpq6nOiLhRpPD1KOUVHfRce97WMHmosPyUkUg9InpESp7fK",
       "email": "admin@gmail.com",
-      "created_at": "2025-07-09T11:24:25.000Z",
-      "updated_at": "2025-07-09T11:24:25.000Z",
+      "created_at": "2025-07-09T16:17:15.000Z",
+      "updated_at": "2025-07-09T16:17:15.000Z",
       "role_id": 1
-    },
-    {
-      "id": 2,
-      "username": "SrunBorath",
-      "password": "$2b$10$zKMhcRnBXh1Adjg7c.mAFewxL5YjZGfiI94E9A1BNVIZvmGs.krV6",
-      "email": "srunborath7@gmail.com",
-      "created_at": "2025-07-09T11:27:07.000Z",
-      "updated_at": "2025-07-09T11:27:07.000Z",
-      "role_id": 3
     }
   ],
-  "roles": [
+  "role": [
     {
       "id": 1,
       "role_name": "admin"
@@ -33,7 +24,7 @@
       "role_name": "user"
     }
   ],
-  "profiles": [
+  "profile": [
     {
       "id": 1,
       "user_id": 1,
@@ -41,18 +32,18 @@
       "last_name": null,
       "phone": null,
       "address": null,
-      "created_at": "2025-07-09T11:24:25.000Z",
-      "updated_at": "2025-07-09T11:24:25.000Z"
-    },
+      "created_at": "2025-07-09T16:17:15.000Z",
+      "updated_at": "2025-07-09T16:17:15.000Z"
+    }
+  ],
+  "categories": [
     {
-      "id": 2,
-      "user_id": 2,
-      "first_name": null,
-      "last_name": null,
-      "phone": null,
-      "address": null,
-      "created_at": "2025-07-09T11:27:07.000Z",
-      "updated_at": "2025-07-09T11:27:07.000Z"
+      "id": 1,
+      "name": "Drink",
+      "description": "Good",
+      "created_by": 1,
+      "created_at": "2025-07-09T16:21:40.000Z",
+      "updated_at": "2025-07-09T16:21:40.000Z"
     }
   ]
 }
