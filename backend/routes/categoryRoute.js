@@ -3,8 +3,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../connection/connection');
 const { saveData } = require('../stores/saveJson');
-
-router.post('/categories', (req, res) => {
+const checkUser = require('../middleware/auth');
+router.post('/categories',checkUser, (req, res) => {
   const { name, description } = req.body;
   const created_by = req.session?.user?.id;
 
@@ -39,7 +39,7 @@ router.post('/categories', (req, res) => {
     res.status(201).json({ message: 'Category created', category });
   });
 });
-router.put('/categories/:id', (req, res) => {
+router.put('/categories/:id',checkUser, (req, res) => {
   const { id } = req.params;
   const { name, description } = req.body;
 
@@ -74,7 +74,7 @@ router.put('/categories/:id', (req, res) => {
     res.status(200).json({ message: 'Category updated', category: updatedCategory });
   });
 });
-router.delete('/categories/:id', (req, res) => {
+router.delete('/categories/:id',checkUser, (req, res) => {
   const { id } = req.params;
 
   const sql = `DELETE FROM categories WHERE id = ?`;

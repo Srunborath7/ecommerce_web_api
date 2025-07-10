@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../connection/connection');
 const { saveData, deleteJsonById } = require('../stores/saveJson');
+const checkUser = require('../middleware/auth');
 
-// ➕ Create Product
-router.post('/products', (req, res) => {
+router.post('/products',checkUser, (req, res) => {
   const { name, price, description, category_id, img_pro } = req.body;
   const created_by = req.session?.user?.id || null;
 
@@ -39,7 +39,7 @@ router.post('/products', (req, res) => {
   });
 });
 
-router.put('/products/:id', (req, res) => {
+router.put('/products/:id',checkUser, (req, res) => {
   const { id } = req.params;
   const { name, price, description, category_id, img_pro } = req.body;
 
@@ -74,7 +74,7 @@ router.put('/products/:id', (req, res) => {
   });
 });
 
-router.delete('/products/:id', (req, res) => {
+router.delete('/products/:id',checkUser, (req, res) => {
   const id = parseInt(req.params.id);
 
   db.query('DELETE FROM products WHERE id = ?', [id], (err) => {
@@ -90,7 +90,7 @@ router.delete('/products/:id', (req, res) => {
 });
 
 // 📦 Get All Products
-router.get('/products', (req, res) => {
+router.get('/products',checkUser, (req, res) => {
   const sql = `
     SELECT p.*, c.name AS category_name, u.username AS created_by_name
     FROM products p
