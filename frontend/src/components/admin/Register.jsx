@@ -22,7 +22,7 @@ function Register() {
         .then(data => {
           if (data.success) {
             alert('Registration successful! Please login.');
-            window.location.href = '/login'; 
+            window.location.href = '/'; 
           } else {
             alert(data.message || 'Registration failed');
           }

@@ -8,6 +8,15 @@
       "created_at": "2025-07-09T16:17:15.000Z",
       "updated_at": "2025-07-09T16:17:15.000Z",
       "role_id": 1
+    },
+    {
+      "id": 2,
+      "username": "SrunBorath",
+      "password": "$2b$10$XIIBPaQ.Z2WAN3v3.Dq3hukymm.L62r/JZkGEt5Vr/kPES1/whO1m",
+      "email": "srunborath7@gmail.com",
+      "created_at": "2025-07-10T03:47:25.000Z",
+      "updated_at": "2025-07-10T03:47:25.000Z",
+      "role_id": 3
     }
   ],
   "role": [
@@ -34,16 +43,52 @@
       "address": null,
       "created_at": "2025-07-09T16:17:15.000Z",
       "updated_at": "2025-07-09T16:17:15.000Z"
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "first_name": null,
+      "last_name": null,
+      "phone": null,
+      "address": null,
+      "created_at": "2025-07-10T03:47:25.000Z",
+      "updated_at": "2025-07-10T03:47:25.000Z"
     }
   ],
   "categories": [
     {
       "id": 1,
       "name": "Electronics",
-      "description": "Updated electronics category",
+      "description": "electronics category",
       "created_by": 1,
       "created_at": "2025-07-09T16:21:40.000Z",
-      "updated_at": "2025-07-09T17:07:56.000Z"
+      "updated_at": "2025-07-10T08:11:24.000Z"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Sample Product",
+      "price": 19.99,
+      "description": "This is a sample product description.",
+      "stock_quantity": 50,
+      "category_id": 1,
+      "created_by": 1,
+      "img_pro": "sample.jpg",
+      "created_at": "2025-07-10T09:05:12.000Z",
+      "updated_at": "2025-07-10T10:56:14.982Z"
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "product_id": 1,
+      "quantity": 50,
+      "action": "IN",
+      "description": "Initial stock",
+      "created_by": null,
+      "created_at": "2025-07-10T09:06:54.000Z",
+      "updated_at": "2025-07-10T09:06:54.000Z"
     }
   ]
 }

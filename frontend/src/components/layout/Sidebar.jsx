@@ -1,15 +1,17 @@
 import { NavLink } from 'react-router-dom';
-import { FaTachometerAlt, FaBox, FaPlus, FaTags } from 'react-icons/fa';
+import { FaTachometerAlt, FaBox, FaPlus, FaTags,FaShoppingCart } from 'react-icons/fa';
 
 const Sidebar = () => {
   return (
     <aside style={sidebarStyle}>
       <h2 style={{ marginBottom: '30px', fontSize: '22px' }}>Admin Panel</h2>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        <SidebarItem to="/dashboard" icon={<FaTachometerAlt />} label="Dashboard" />
+        <SidebarItem to="/dashboard/" icon={<FaTachometerAlt />} label="Dashboard" />
+        <SidebarItem to="/dashboard/category" icon={<FaTags />} label="Category" />
         <SidebarItem to="/dashboard/products" icon={<FaBox />} label="Products" />
         <SidebarItem to="/dashboard/add" icon={<FaPlus />} label="Add" />
-        <SidebarItem to="/dashboard/category" icon={<FaTags />} label="Category" />
+        <SidebarItem to="/dashboard/inventory" icon={<FaTags />} label="Inventory" />
+        <SidebarItem to="/ecommerce" icon={<FaShoppingCart />} label="eCommerce" />
       </ul>
     </aside>
   );

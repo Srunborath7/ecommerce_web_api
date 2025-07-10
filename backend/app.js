@@ -23,10 +23,15 @@ app.use(cors({
 const user = require('./routes/userRoute');
 const product = require('./routes/productRoute');
 const category = require('./routes/categoryRoute');
+const inventory = require('./routes/inventoryRoute');
 require('./models/categoryModel').createCategoryTable();
+require('./models/inventoryModel').createInventoryTable();
+require('./models/productModel').createProductTable();
 app.use('/api', user);
 app.use('/api', category);
 app.use('/api', product);
+app.use('/api',inventory);
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });

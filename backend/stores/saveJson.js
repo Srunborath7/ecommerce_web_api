@@ -55,7 +55,7 @@ function updateJsonById(fileName, updatedData, key) {
 }
 
 function saveAllToJson() {
-  let users = [], roles = [], profiles = [], categories = [];
+  let users = [], roles = [], profiles = [], categories = [], products = [], inventory = [];
 
   db.query('SELECT * FROM users', (e1, r1) => {
     if (!e1) users = r1;
@@ -69,21 +69,32 @@ function saveAllToJson() {
         db.query('SELECT * FROM categories', (e4, r4) => {
           if (!e4) categories = r4;
 
-          const backup = {
-            users,
-            role: roles,
-            profile: profiles,
-            categories
-          };
+          db.query('SELECT * FROM products', (e5, r5) => {
+            if (!e5) products = r5;
 
-          const filePath = path.join(__dirname, '../DB/db.json');
-          fs.writeFileSync(filePath, JSON.stringify(backup, null, 2), 'utf-8');
-          console.log('📁 db.json saved successfully');
+            db.query('SELECT * FROM inventory', (e6, r6) => {
+              if (!e6) inventory = r6;
+
+              const backup = {
+                users,
+                role: roles,
+                profile: profiles,
+                categories,
+                products,
+                inventory
+              };
+
+              const filePath = path.join(__dirname, '../DB/db.json');
+              fs.writeFileSync(filePath, JSON.stringify(backup, null, 2), 'utf-8');
+              console.log('📦 db.json saved with inventory');
+            });
+          });
         });
       });
     });
   });
 }
+
 function deleteJsonById(fileName, idToDelete, key) {
   const filePath = path.join(__dirname, '../DB/' + fileName);
 

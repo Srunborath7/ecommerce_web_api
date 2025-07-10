@@ -32,7 +32,14 @@ function Login() {
         setMessage(data.message);
         console.log('Login success user:', data.user);
         localStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/dashboard');
+        // Redirect based on role_id
+        if (data.user.role_id === 1) {
+          navigate('/dashboard');
+        } else if (data.user.role_id === 2) {
+          navigate('/dashboard'); 
+        } else {
+          navigate('/ecommerce'); 
+        }
       } else {
         setMessage(data.message || 'Login failed');
       }

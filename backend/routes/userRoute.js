@@ -6,7 +6,9 @@ const { saveData } = require('../stores/saveJson');
 
 user.post('/login', (req, res) => {
   const { emailOrUsername, password } = req.body;
-
+  if (!emailOrUsername || !password) {
+    return res.status(400).json({ message: 'Email/Username and password are required' });
+  }
   const sql = `
     SELECT users.*, roles.role_name 
     FROM users 
@@ -43,7 +45,8 @@ user.post('/login', (req, res) => {
       id: user.id,
       username: user.username,
       email: user.email,
-      role: user.role_name
+      role: user.role_name,
+      role_id: user.role_id
     };
 
     res.status(200).json({
@@ -55,13 +58,12 @@ user.post('/login', (req, res) => {
 
 user.post('/register', async (req, res) => {
   const { username, password, email, role_id: requestedRoleId } = req.body;
-
-  // Determine role_id based on current session role
+  if (!username || !password || !email) {
+    return res.status(400).json({ message: 'Username, password, and email are required' });
+  }
   const currentUserRole = req.session?.user?.role || 'user';
-  // Normalize role string if needed (depends on how you store it)
   const role = typeof currentUserRole === 'string' ? currentUserRole.toLowerCase() : 'user';
 
-  // Non-admin/manager roles forced to 'user' role_id = 3
   const role_id = (role !== 'admin' && role !== 'manager') ? 3 : requestedRoleId;
 
   try {
@@ -100,11 +102,9 @@ user.post('/register', async (req, res) => {
 
             const profile = profileRows[0];
 
-            // Save user and profile to JSON
             saveData('../DB/db.json', fullUser, 'users');
-            saveData('../DB/db.json', profile, 'profiles'); // Use plural key for consistency
+            saveData('../DB/db.json', profile, 'profiles'); 
 
-            // Setup session user object (only necessary fields)
             const sessionUser = {
               id: fullUser.id,
               username: fullUser.username,
