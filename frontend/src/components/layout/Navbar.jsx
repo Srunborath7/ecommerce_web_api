@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import Profile from "./Profile"; 
 export default function AppNavbar() {
     return (
         <Navbar bg="dark" variant="dark" expand="md" sticky="top" className="mb-4">
@@ -15,6 +15,7 @@ export default function AppNavbar() {
                         <Nav.Link href="/cart">Cart</Nav.Link>
                         <Nav.Link href="/profile">Profile</Nav.Link>
                     </Nav>
+                    <Profile/>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

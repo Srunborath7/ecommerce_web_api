@@ -127,4 +127,22 @@ user.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+user.get('/profile/:id', (req, res) => {
+  const userId = req.params.id;
+
+  db.query(`SELECT * FROM user_profiles WHERE user_id = ?`, [userId], (err, results) => {
+    if (err) {
+      console.error('Profile fetch error:', err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    const profile = results[0];
+    res.status(200).json(profile);
+  });
+});
 module.exports = user;

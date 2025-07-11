@@ -31,7 +31,6 @@ app.use('/api', user);
 app.use('/api', category);
 app.use('/api', product);
 app.use('/api',inventory);
-
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
