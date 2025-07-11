@@ -96,4 +96,39 @@ router.delete('/categories/:id',checkUser, (req, res) => {
     res.status(200).json({ message: 'Category deleted' });
   });
 });
+router.get('/categories', (req, res) => {
+  const sql = `
+    SELECT c.*, u.username AS creator_name
+    FROM categories c
+    JOIN users u ON c.created_by = u.id
+    ORDER BY c.created_at DESC
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching categories:', err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+
+    res.json(results);
+  });
+});
+router.get('/categories/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = `SELECT * FROM categories WHERE id = ?`;
+
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error('Error fetching category:', err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    res.json(results[0]);
+  });
+});
 module.exports = router;

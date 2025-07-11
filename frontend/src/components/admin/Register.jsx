@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React , { useEffect } from 'react';
 import '../../style/Form.css'; // Same style as login but with minor tweaks
 import logo from '../../assets/logo.png'; // Adjust the path to your logo'
+import { Link } from 'react-router-dom';
 function Register() {
     useEffect(() => {
             document.title = 'Register | eCommerce';
@@ -75,6 +76,14 @@ function Register() {
           <div className="d-grid">
             <button type="submit" className="btn btn-cartoon">🎉 Register</button>
           </div>
+          {(role_id === 1 || role_id === 2) && (
+            <div className="text-center mt-3">
+               <Link to="/dashboard" className="btn btn-danger">
+                  Go to Dashboard
+              </Link>
+            </div>
+           
+          )}
         </form>
         <div className="text-center mt-3">
           <small>Already have an account? <a href="/">Login here 🚪</a></small>

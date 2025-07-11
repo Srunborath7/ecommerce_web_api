@@ -42,8 +42,12 @@ const Profile = ({ isLoggedIn, onLogin, onRegister, onProfile }) => {
 
     return (
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button onClick={onLogin}>Login</button>
-            <button onClick={onRegister}>Register</button>
+            {!user?.id && (
+                <>
+                <button onClick={onLogin}>Login</button>
+                <button onClick={onRegister}>Register</button>
+                </>
+            )}
 
             <div onClick={handleProfileClick} style={{ cursor: 'pointer' }}>
                 <img
@@ -54,8 +58,8 @@ const Profile = ({ isLoggedIn, onLogin, onRegister, onProfile }) => {
                     }
                     alt="Profile"
                     style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '60px',
+                        height: '60px',
                         borderRadius: '50%',
                         objectFit: 'cover',
                     }}

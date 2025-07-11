@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaBox, FaPlus, FaTags,FaShoppingCart } from 'react-icons/fa';
-
 const Sidebar = () => {
   return (
     <aside style={sidebarStyle}>
