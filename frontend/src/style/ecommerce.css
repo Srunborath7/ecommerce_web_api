@@ -1,0 +1,38 @@
+.hero-section {
+  background: linear-gradient(135deg, #343a40, #212529);
+  height: 90vh;
+  overflow: hidden;
+  padding-top: 50px;
+}
+
+.text-slide {
+  animation: slideInLeft 1s ease-out forwards;
+  opacity: 0;
+}
+
+.img-slide {
+  animation: slideInRight 1s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-60px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(60px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

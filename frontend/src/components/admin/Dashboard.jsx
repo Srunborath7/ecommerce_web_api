@@ -144,8 +144,7 @@ function Dashboard() {
           <div className="d-flex align-items-center justify-content-center gap-3">
             <Profile user={user} />
             <div>
-              <p>UserName: {user.username}</p>
-              <p>Permission: {user.role}</p>
+              <p>UserName: {user.username}<br/>Permission: {user.role}</p>
             </div>
           </div>
         </div>
