@@ -89,6 +89,54 @@
       "img_pro": "sample.jpg",
       "created_at": "2025-07-10T09:05:12.000Z",
       "updated_at": "2025-07-10T15:34:52.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Caco",
+      "price": 1,
+      "description": "Good",
+      "stock_quantity": 0,
+      "category_id": 3,
+      "created_by": 1,
+      "img_pro": "1752558513530-R.jpg",
+      "created_at": "2025-07-15T05:48:33.000Z",
+      "updated_at": "2025-07-15T05:48:33.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Caco",
+      "price": 1,
+      "description": "Good",
+      "stock_quantity": 0,
+      "category_id": 3,
+      "created_by": 1,
+      "img_pro": null,
+      "created_at": "2025-07-15T06:40:42.000Z",
+      "updated_at": "2025-07-15T06:40:42.000Z"
+    },
+    {
+      "id": 4,
+      "name": "Pepsi",
+      "price": "3",
+      "description": "33",
+      "category_id": "3",
+      "img_pro": "1752562816005-OIP.webp",
+      "stock_quantity": "3",
+      "created_by": "1",
+      "created_at": "2025-07-15T07:00:16.010Z",
+      "updated_at": "2025-07-15T07:00:16.010Z"
+    },
+    {
+      "id": 5,
+      "name": "Pepsi",
+      "price": "3",
+      "description": "Good",
+      "category_id": "3",
+      "img_pro": "1752562864923-OIP.webp",
+      "stock_quantity": "3",
+      "created_by": "1",
+      "created_at": "2025-07-15T07:01:04.927Z",
+      "updated_at": "2025-07-15T07:01:04.927Z"
     }
   ],
   "inventory": [

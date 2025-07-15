@@ -6,6 +6,7 @@ app.use(express.json());
 const session = require('express-session');
 app.use(express.urlencoded({ extended: true })); 
 const cors = require('cors');
+const path = require('path');
 app.use(session({
   secret: 'mySecretKey',
   resave: false,
@@ -27,6 +28,7 @@ const inventory = require('./routes/inventoryRoute');
 require('./models/categoryModel').createCategoryTable();
 require('./models/inventoryModel').createInventoryTable();
 require('./models/productModel').createProductTable();
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', user);
 app.use('/api', category);
 app.use('/api', product);

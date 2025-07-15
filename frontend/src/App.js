@@ -10,7 +10,7 @@ import Category from './components/admin/Category';
 import Ecommerce from './components/pages/ecommerce';
 import Checkout from './components/pages/Checkout';
 import { CartProvider } from './components/layout/CartContext';  // Import your cart context
-
+import EditProduct from './components/admin/EditProduct';
 function App() {
   return (
     <CartProvider>
@@ -28,6 +28,7 @@ function App() {
 
           <Route path="/ecommerce" element={<Ecommerce />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/edit-product/:id" element={<EditProduct />} />
         </Routes>
       </Router>
     </CartProvider>

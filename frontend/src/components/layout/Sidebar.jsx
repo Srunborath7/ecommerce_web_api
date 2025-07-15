@@ -8,7 +8,7 @@ const Sidebar = () => {
         <SidebarItem to="/dashboard/" icon={<FaTachometerAlt />} label="Dashboard" />
         <SidebarItem to="/dashboard/category" icon={<FaTags />} label="Category" />
         <SidebarItem to="/dashboard/products" icon={<FaBox />} label="Products" />
-        <SidebarItem to="/dashboard/add" icon={<FaPlus />} label="Add" />
+        <SidebarItem to="/dashboard/add" icon={<FaPlus />} label="Add Product" />
         <SidebarItem to="/dashboard/inventory" icon={<FaTags />} label="Inventory" />
         <SidebarItem to="/ecommerce" icon={<FaShoppingCart />} label="eCommerce" />
       </ul>
