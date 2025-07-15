@@ -39,12 +39,12 @@
       "user_id": 1,
       "first_name": null,
       "last_name": null,
-      "phone": null,
-      "address": null,
-      "profile_picture": "",
+      "phone": "0974242291",
+      "address": "Chomka Doung",
+      "profile_picture": "1752593759631-photo_2024-06-26_18-30-55.jpg",
       "bio": "",
       "created_at": "2025-07-09T16:17:15.000Z",
-      "updated_at": "2025-07-09T16:17:15.000Z"
+      "updated_at": "2025-07-15T15:35:59.000Z"
     },
     {
       "id": 2,
@@ -115,28 +115,16 @@
       "updated_at": "2025-07-15T06:40:42.000Z"
     },
     {
-      "id": 4,
-      "name": "Pepsi",
-      "price": "3",
-      "description": "33",
-      "category_id": "3",
-      "img_pro": "1752562816005-OIP.webp",
-      "stock_quantity": "3",
-      "created_by": "1",
-      "created_at": "2025-07-15T07:00:16.010Z",
-      "updated_at": "2025-07-15T07:00:16.010Z"
-    },
-    {
       "id": 5,
       "name": "Pepsi",
-      "price": "3",
+      "price": 3,
       "description": "Good",
-      "category_id": "3",
+      "stock_quantity": 3,
+      "category_id": 3,
+      "created_by": 1,
       "img_pro": "1752562864923-OIP.webp",
-      "stock_quantity": "3",
-      "created_by": "1",
-      "created_at": "2025-07-15T07:01:04.927Z",
-      "updated_at": "2025-07-15T07:01:04.927Z"
+      "created_at": "2025-07-15T07:01:04.000Z",
+      "updated_at": "2025-07-15T07:01:04.000Z"
     }
   ],
   "inventory": [
@@ -149,6 +137,14 @@
       "created_by": null,
       "created_at": "2025-07-10T09:06:54.000Z",
       "updated_at": "2025-07-10T15:34:52.000Z"
+    }
+  ],
+  "profiles": [
+    {
+      "userId": "1",
+      "phone": "0974242291",
+      "address": "Chomka Doung",
+      "profile_picture": null
     }
   ]
 }

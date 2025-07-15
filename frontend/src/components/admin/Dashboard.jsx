@@ -141,10 +141,15 @@ function Dashboard() {
             <h3>{getPageTitle()} | eCommerce</h3>
           </div>
 
-          <div className="d-flex align-items-center justify-content-center gap-3">
+          <div className="d-flex justify-content-center gap-4 p-3 border rounded shadow-sm bg-light">
             <Profile user={user} />
             <div>
-              <p>UserName: {user.username}<br/>Permission: {user.role}</p>
+              <p className="mb-1 fw-semibold" style={{ fontSize: '1.1rem' }}>
+                Username: <span className="text-primary">{user.username}</span>
+              </p>
+              <p className="mb-0 text-muted" style={{ fontSize: '0.9rem' }}>
+                Permission: <span className="text-capitalize">{user.role}</span>
+              </p>
             </div>
           </div>
         </div>

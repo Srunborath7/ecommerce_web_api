@@ -29,6 +29,7 @@ require('./models/categoryModel').createCategoryTable();
 require('./models/inventoryModel').createInventoryTable();
 require('./models/productModel').createProductTable();
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', user);
 app.use('/api', category);
 app.use('/api', product);

@@ -3,7 +3,25 @@ const user = express.Router();
 const db = require('../connection/connection');
 const bcrypt = require('bcrypt');
 const { saveData } = require('../stores/saveJson');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
 
+const uploadPath = path.join(__dirname, '../uploads/profiles');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // Create the directory if it doesn't exist
+    fs.mkdirSync(uploadPath, { recursive: true });
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
 user.post('/login', (req, res) => {
   const { emailOrUsername, password } = req.body;
   if (!emailOrUsername || !password) {
@@ -130,19 +148,67 @@ user.post('/register', async (req, res) => {
 
 user.get('/profile/:id', (req, res) => {
   const userId = req.params.id;
-
   db.query(`SELECT * FROM user_profiles WHERE user_id = ?`, [userId], (err, results) => {
-    if (err) {
-      console.error('Profile fetch error:', err);
+    if (err) return res.status(500).json({ message: 'Server error' });
+    if (results.length === 0) return res.status(404).json({ message: 'Profile not found' });
+    res.status(200).json(results[0]);
+  });
+});
+
+user.post('/profile/update', upload.single('profile_picture'), (req, res) => {
+  const { userId, firstName, lastName, phone, address } = req.body;
+  const newProfilePic = req.file ? req.file.filename : null;
+
+  // First, get current profile_picture filename if no new file uploaded
+  const selectSql = `SELECT profile_picture FROM user_profiles WHERE user_id = ?`;
+
+  db.query(selectSql, [userId], (selectErr, selectResults) => {
+    if (selectErr) {
+      console.error('Select profile_picture error:', selectErr);
       return res.status(500).json({ message: 'Server error' });
     }
 
-    if (results.length === 0) {
+    if (selectResults.length === 0) {
       return res.status(404).json({ message: 'Profile not found' });
     }
 
-    const profile = results[0];
-    res.status(200).json(profile);
+    // Use new profile picture if uploaded; otherwise keep old one
+    const profile_picture = newProfilePic || selectResults[0].profile_picture;
+
+    const updateSql = `
+      UPDATE user_profiles 
+      SET first_name = ?, last_name = ?, phone = ?, address = ?, profile_picture = ?
+      WHERE user_id = ?
+    `;
+
+    db.query(
+      updateSql,
+      [firstName, lastName, phone, address, profile_picture, userId],
+      (updateErr, updateResult) => {
+        if (updateErr) {
+          console.error('Profile update error:', updateErr);
+          return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (updateResult.affectedRows === 0) {
+          return res.status(404).json({ message: 'Profile not found' });
+        }
+
+        const updatedProfile = {
+          userId,
+          firstName,
+          lastName,
+          phone,
+          address,
+          profile_picture,
+        };
+
+        saveData('../DB/db.json', updatedProfile, 'profiles');
+
+        res.status(200).json({ message: 'Profile updated successfully', profile: updatedProfile });
+      }
+    );
   });
 });
+
 module.exports = user;
