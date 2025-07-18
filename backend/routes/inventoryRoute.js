@@ -4,7 +4,23 @@ const db = require('../connection/connection');
 const { saveData, deleteJsonById } = require('../stores/saveJson');
 const checkUser = require('../middleware/auth');
 // ➕ Add inventory log (IN or OUT) & adjust product stock_quantity
-router.post('/inventory',checkUser, (req, res) => {
+router.get('/inventory',checkUser, (req, res) => {
+  const sql = `
+    SELECT inv.*, p.name AS product_name, u.username AS user
+    FROM inventory inv    
+    LEFT JOIN products p ON inv.product_id = p.id
+    LEFT JOIN users u ON inv.created_by = u.id
+    ORDER BY inv.created_at DESC
+  `;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Inventory fetch failed:', err);
+      return res.status(500).json({ message: 'DB error' });
+    }
+    res.json(results);
+  });
+});
+router.post('/inventory', checkUser, (req, res) => {
   const { product_id, quantity, action, description } = req.body;
   const created_by = req.session?.user?.id || null;
 
@@ -13,8 +29,8 @@ router.post('/inventory',checkUser, (req, res) => {
   }
 
   const insertSQL = `
-    INSERT INTO inventory (product_id, quantity, action, description, created_by)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO inventory (product_id, quantity, action, description, created_by, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
   `;
 
   db.query(insertSQL, [product_id, quantity, action, description || null, created_by], (err, result) => {
@@ -28,25 +44,51 @@ router.post('/inventory',checkUser, (req, res) => {
       UPDATE products SET stock_quantity = stock_quantity ${action === 'IN' ? '+' : '-'} ?
       WHERE id = ?
     `;
-    db.query(stockSQL, [quantity, product_id]);
 
-    const inventory = {
-      id: result.insertId,
-      product_id,
-      quantity,
-      action,
-      description,
-      created_by,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    db.query(stockSQL, [quantity, product_id], (err2, result2) => {
+      if (err2) {
+        console.error('Failed to update stock_quantity:', err2);
+        return res.status(500).json({ message: 'Stock update error' });
+      }
+      if (result2.affectedRows === 0) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
 
-    saveData('../DB/db.json', inventory, 'inventory');
+      const newInventory = {
+        id: result.insertId,
+        product_id,
+        quantity,
+        action,
+        description,
+        created_by,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
 
-    res.status(201).json({ message: 'Inventory logged', inventory });
+      // Update inventory JSON file with new entry
+      const { updateJsonById } = require('../stores/saveJson');
+      updateJsonById('../DB/db.json', newInventory, 'inventory');
+      
+      // Get the updated product stock_quantity from DB and update JSON file
+      db.query(`SELECT * FROM products WHERE id = ?`, [product_id], (err3, productRows) => {
+        if (!err3 && productRows.length > 0) {
+          const updatedProduct = {
+            ...productRows[0],
+            updated_at: new Date().toISOString()
+          };
+
+          // Update product JSON entry by id
+          updateJsonById('../DB/db.json', updatedProduct, 'products');
+        }
+
+        res.status(201).json({
+          message: 'Inventory logged and product stock updated',
+          inventory: newInventory
+        });
+      });
+    });
   });
 });
-
 router.put('/inventory/:id', (req, res) => {
   const { id } = req.params;
   const { quantity, description, action, product_id } = req.body;
@@ -93,7 +135,7 @@ router.put('/inventory/:id', (req, res) => {
         updated_at: new Date().toISOString()
       };
       const { updateJsonById } = require('../stores/saveJson');
-      updateJsonById('../DB/db.json', 'inventory', parseInt(id), updateInventory);
+      updateJsonById('../DB/db.json', updateInventory, 'inventory');
       db.query(`SELECT stock_quantity FROM products WHERE id = ?`, [product_id], (err3, productRows) => {
         if (!err3 && productRows.length > 0) {
           const updatedProduct = {

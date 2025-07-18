@@ -1,20 +1,18 @@
-// src/components/pages/Checkout.js
 import React from "react";
-import { useCart } from "../../components/layout/CartContext"; // Adjust path if needed
+import { useCart } from "../layout/CartContext";
 import { Container, Table, Button, Image } from "react-bootstrap";
 
 export default function Checkout() {
-  const { cartItems } = useCart();
-
-  const parsePrice = (price) => Number(price.replace(/[^0-9.-]+/g, ""));
+  const { cartItems, clearCart } = useCart();
 
   const total = cartItems.reduce(
-    (sum, item) => sum + parsePrice(item.price) * item.quantity,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 
   const handlePayment = () => {
     alert(`Payment of $${total.toFixed(2)} successful!`);
+    clearCart(); // empty cart after payment
   };
 
   if (cartItems.length === 0) {
@@ -41,7 +39,7 @@ export default function Checkout() {
         </thead>
         <tbody>
           {cartItems.map(({ id, name, price, quantity, image }) => {
-            const subtotal = parsePrice(price) * quantity;
+            const subtotal = price * quantity;
             return (
               <tr key={id}>
                 <td>
@@ -53,7 +51,7 @@ export default function Checkout() {
                   />
                 </td>
                 <td>{name}</td>
-                <td>{price}</td>
+                <td>${price.toFixed(2)}</td>
                 <td>{quantity}</td>
                 <td>${subtotal.toFixed(2)}</td>
               </tr>

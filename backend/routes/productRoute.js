@@ -64,18 +64,22 @@ router.post('/products', checkUser, upload.single('img_pro'), (req, res) => {
   );
 });
 
-router.put('/products/:id', checkUser, (req, res) => {
+router.put('/products/:id', upload.single('img_pro'), checkUser, (req, res) => {
   const { id } = req.params;
-  const { name, price, description, category_id, img_pro } = req.body;
+  const { name, price, description, category_id, img_pro: oldImgPro } = req.body;
 
   if (!name || !price) return res.status(400).json({ message: 'Name and price are required' });
+
+  // Use the uploaded file if present, else fallback to the old image filename
+  const img_pro = req.file ? req.file.filename : (oldImgPro || null);
 
   const sql = `
     UPDATE products
     SET name = ?, price = ?, description = ?, category_id = ?, img_pro = ?, updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
   `;
-  db.query(sql, [name, price, description || null, category_id || null, img_pro || null, id], (err, result) => {
+
+  db.query(sql, [name, price, description || null, category_id || null, img_pro, id], (err, result) => {
     if (err) {
       console.error('Error updating product:', err);
       return res.status(500).json({ message: 'DB error' });
@@ -83,21 +87,24 @@ router.put('/products/:id', checkUser, (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'product not found' });
     }
+
     const updatedProduct = {
       id: parseInt(id),
       name,
       price,
       description: description || null,
       category_id: category_id || null,
-      img_pro: img_pro || null,
+      img_pro,
       updated_at: new Date().toISOString()
     };
+
     const { updateJsonById } = require('../stores/saveJson');
     updateJsonById('../DB/db.json', updatedProduct, 'products');
 
     res.status(200).json({ message: 'Product updated', product: updatedProduct });
   });
 });
+
 
 router.delete('/products/:id',checkUser, (req, res) => {
   const id = parseInt(req.params.id);

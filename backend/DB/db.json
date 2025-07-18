@@ -1,4 +1,7 @@
 {
+  "2": [
+    "products"
+  ],
   "users": [
     {
       "id": 1,
@@ -37,14 +40,14 @@
     {
       "id": 1,
       "user_id": 1,
-      "first_name": null,
-      "last_name": null,
+      "first_name": "Srun",
+      "last_name": "Borath",
       "phone": "0974242291",
       "address": "Chomka Doung",
-      "profile_picture": "1752593759631-photo_2024-06-26_18-30-55.jpg",
+      "profile_picture": "1752594683360-a1e7d054-c9ef-4e1b-90ae-641e7283fde2.png",
       "bio": "",
       "created_at": "2025-07-09T16:17:15.000Z",
-      "updated_at": "2025-07-15T15:35:59.000Z"
+      "updated_at": "2025-07-15T15:51:23.000Z"
     },
     {
       "id": 2,
@@ -83,48 +86,48 @@
       "name": "Sample Product",
       "price": 19.99,
       "description": "This is a sample product description.",
-      "stock_quantity": 140,
+      "stock_quantity": 112,
       "category_id": 1,
       "created_by": 1,
-      "img_pro": "sample.jpg",
+      "img_pro": "1752855614083-R.jpg",
       "created_at": "2025-07-10T09:05:12.000Z",
-      "updated_at": "2025-07-10T15:34:52.000Z"
+      "updated_at": "2025-07-18T16:24:01.301Z"
     },
     {
       "id": 2,
       "name": "Caco",
       "price": 1,
       "description": "Good",
-      "stock_quantity": 0,
+      "stock_quantity": 20,
       "category_id": 3,
       "created_by": 1,
       "img_pro": "1752558513530-R.jpg",
       "created_at": "2025-07-15T05:48:33.000Z",
-      "updated_at": "2025-07-15T05:48:33.000Z"
+      "updated_at": "2025-07-18T15:52:46.000Z"
     },
     {
       "id": 3,
       "name": "Caco",
-      "price": 1,
+      "price": "2",
       "description": "Good",
       "stock_quantity": 0,
-      "category_id": 3,
+      "category_id": "3",
       "created_by": 1,
-      "img_pro": null,
+      "img_pro": "1752855240275-R.jpg",
       "created_at": "2025-07-15T06:40:42.000Z",
-      "updated_at": "2025-07-15T06:40:42.000Z"
+      "updated_at": "2025-07-18T16:20:56.456Z"
     },
     {
       "id": 5,
       "name": "Pepsi",
       "price": 3,
       "description": "Good",
-      "stock_quantity": 3,
+      "stock_quantity": 33,
       "category_id": 3,
       "created_by": 1,
       "img_pro": "1752562864923-OIP.webp",
       "created_at": "2025-07-15T07:01:04.000Z",
-      "updated_at": "2025-07-15T07:01:04.000Z"
+      "updated_at": "2025-07-18T15:15:20.000Z"
     }
   ],
   "inventory": [
@@ -137,14 +140,56 @@
       "created_by": null,
       "created_at": "2025-07-10T09:06:54.000Z",
       "updated_at": "2025-07-10T15:34:52.000Z"
-    }
-  ],
-  "profiles": [
+    },
     {
-      "userId": "1",
-      "phone": "0974242291",
-      "address": "Chomka Doung",
-      "profile_picture": null
+      "id": 2,
+      "product_id": 5,
+      "quantity": 30,
+      "action": "IN",
+      "description": "Initial stock",
+      "created_by": 1,
+      "created_at": "2025-07-18T15:15:20.000Z",
+      "updated_at": "2025-07-18T15:15:20.000Z"
+    },
+    {
+      "id": 3,
+      "product_id": 3,
+      "quantity": 20,
+      "action": "IN",
+      "description": "Initial stock",
+      "created_by": 1,
+      "created_at": "2025-07-18T15:29:09.000Z",
+      "updated_at": "2025-07-18T15:49:28.000Z"
+    },
+    {
+      "id": 4,
+      "product_id": 2,
+      "quantity": "22",
+      "action": "OUT",
+      "description": "Initial stock",
+      "created_by": 1,
+      "created_at": "2025-07-18T15:34:15.000Z",
+      "updated_at": "2025-07-18T16:22:18.339Z"
+    },
+    {
+      "id": 5,
+      "product_id": 2,
+      "quantity": 20,
+      "action": "IN",
+      "description": "good",
+      "created_by": 1,
+      "created_at": "2025-07-18T15:52:46.000Z",
+      "updated_at": "2025-07-18T15:52:46.000Z"
+    },
+    {
+      "id": 6,
+      "product_id": "1",
+      "quantity": "2",
+      "action": "IN",
+      "description": "22",
+      "created_by": 1,
+      "created_at": "2025-07-18T16:24:01.299Z",
+      "updated_at": "2025-07-18T16:24:01.299Z"
     }
   ]
 }

@@ -11,6 +11,7 @@ import Ecommerce from './components/pages/ecommerce';
 import Checkout from './components/pages/Checkout';
 import { CartProvider } from './components/layout/CartContext';  // Import your cart context
 import EditProduct from './components/admin/EditProduct';
+import Inventory from "./components/admin/Inventory";
 function App() {
   return (
     <CartProvider>
@@ -24,6 +25,7 @@ function App() {
             <Route path="products" element={<Products />} />
             <Route path="add" element={<AddProduct />} />
             <Route path="category" element={<Category />} />
+            <Route path="inventory" element={<Inventory />} />
           </Route>
 
           <Route path="/ecommerce" element={<Ecommerce />} />

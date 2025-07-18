@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Button } from "react-bootstrap";
 
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -35,18 +38,26 @@ const EditProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", product.name);
+    formData.append("price", product.price);
+    formData.append("description", product.description || "");
+    formData.append("category_id", product.category_id || "");
+
+    if (selectedFile) {
+      formData.append("img_pro", selectedFile);
+    } else {
+      formData.append("img_pro", product.img_pro || "");
+    }
+
     try {
-      await axios.put(
-        `http://localhost:5000/api/products/${id}`,
-        {
-          name: product.name,
-          price: product.price,
-          description: product.description,
-          category_id: product.category_id,
-          img_pro: product.img_pro,
+      await axios.put(`http://localhost:5000/api/products/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-        { withCredentials: true }
-      );
+        withCredentials: true,
+      });
 
       Swal.fire({
         icon: "success",
@@ -56,7 +67,7 @@ const EditProduct = () => {
         showConfirmButton: false,
       });
 
-      navigate("/products");
+      navigate("/dashboard/products");
     } catch (err) {
       console.error("Update failed:", err);
       Swal.fire("Error", err.response?.data?.message || "Update failed", "error");
@@ -72,9 +83,17 @@ const EditProduct = () => {
           <h3>Edit Product</h3>
         </div>
         <form onSubmit={handleSubmit} className="row g-3 p-4">
-          {/* Image preview + filename input */}
           <div className="col-md-4 text-center">
-            {product.img_pro ? (
+
+            {/* Image preview */}
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="img-fluid rounded mb-3 border"
+                style={{ maxHeight: "250px", objectFit: "cover" }}
+              />
+            ) : product.img_pro ? (
               <img
                 src={`http://localhost:5000/api/uploads/${product.img_pro}`}
                 alt={product.name}
@@ -89,16 +108,34 @@ const EditProduct = () => {
                 <span className="text-muted">No Image</span>
               </div>
             )}
+
+            {/* Hidden file input */}
             <input
-              type="text"
-              className="form-control"
-              placeholder="Image filename"
-              value={product.img_pro || ""}
-              onChange={(e) => setProduct({ ...product, img_pro: e.target.value })}
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              id="fileInput"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                setSelectedFile(file);
+                if (file) {
+                  setPreviewUrl(URL.createObjectURL(file));
+                } else {
+                  setPreviewUrl(null);
+                }
+              }}
             />
+
+            {/* Button triggers hidden input click */}
+            <Button
+              variant="outline-primary"
+              onClick={() => document.getElementById("fileInput").click()}
+              className="w-100"
+            >
+              Choose Image
+            </Button>
           </div>
 
-          {/* Form inputs */}
           <div className="col-md-8">
             <div className="mb-3">
               <label htmlFor="nameInput" className="form-label">
