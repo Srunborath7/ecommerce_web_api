@@ -123,22 +123,6 @@ router.delete('/products/:id',checkUser, (req, res) => {
 
 // 📦 Get All Products
 router.get('/products', (req, res) => {
-  const sql = `
-    SELECT p.*, c.name AS category_name, u.username AS created_by_name
-    FROM products p
-    LEFT JOIN categories c ON p.category_id = c.id
-    LEFT JOIN users u ON p.created_by = u.id
-    ORDER BY p.created_at DESC
-  `;
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error('Error fetching products:', err);
-      return res.status(500).json({ message: 'DB error' });
-    }
-    res.json(results);
-  });
-});
-router.get('/products', (req, res) => {
   const { category, search } = req.query;
 
   let sql = `
