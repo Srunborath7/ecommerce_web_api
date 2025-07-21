@@ -12,6 +12,27 @@ const EditProduct = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
+  // Check if have change or not
+  const [originalProduct, setOriginalProduct] = useState(null);
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/products/${id}`).then((res) => {
+      setProduct(res.data);
+      setOriginalProduct(res.data);
+    });
+  }, [id]);
+  const isProductChanged = () => {
+    if (!originalProduct || !product) return false;
+
+    return (
+      product.name !== originalProduct.name ||
+      product.price !== originalProduct.price ||
+      product.description !== originalProduct.description ||
+      product.category_id !== originalProduct.category_id ||
+      selectedFile !== null
+    );
+  };
+  // ---------------------------------------
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -199,9 +220,20 @@ const EditProduct = () => {
               </select>
             </div>
 
-            <button type="submit" className="btn btn-primary w-100">
-              Save Changes
-            </button>
+            {/* Check if has change show save button if not show cancel button */}
+            {isProductChanged() ? (
+              <button type="submit" className="btn btn-primary w-100">
+                Save Changes
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-secondary w-100"
+                onClick={() => navigate("/dashboard/products")}
+              >
+                Cancel
+              </button>
+            )}
           </div>
         </form>
       </div>
