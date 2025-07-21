@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 // Use card
-import {
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  Typography
-} from '@mui/material';
 // install to use this card : npm install @mui/material @emotion/react @emotion/styled
 // Alert | npm install sweetalert2
 import Swal from 'sweetalert2';
+import { Row, Col, Card, Button, Alert } from "react-bootstrap";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 
@@ -34,6 +29,15 @@ function ProductPage() {
     } catch (err) {
       console.error("Failed to fetch categories:", err);
     }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.1 },
+    }),
   };
 
   // Run on component load
@@ -229,83 +233,73 @@ function ProductPage() {
 
       {/* Product */}
       <div
-        className="p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-        style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
+        style={{
+          height: '70vh',
+          overflowY: 'auto',
+          padding: '0 1rem',
+        }}
       >
-        {products.length === 0 ? (
-          <div style={{ textAlign: "center", color: "#888", fontSize: "18px" }}>
-            Not yet have product!
-          </div>
-        ) : (
-          products.map((product) => (
-            <Card key={product.id} sx={{ maxWidth: 345, mx: 'auto' }}>
-              <CardActionArea>
-                {/* Make the image taller */}
-                <CardMedia
-                  component="img"
-                  height="180" // increased from 140
-                  image={`http://localhost:5000/api/uploads/${product.img_pro}`}
-                  alt={product.name}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h6" component="div">
-                    {product.name}
-                  </Typography>
-                  <Typography variant="subtitle1" color="text.secondary">
-                    ${product.price}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    {product.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-
-              {/* Buttons container aligned right */}
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  gap: '10px',
-                  padding: '8px 16px 16px 16px',
-                }}
-              >
-                <button
-                  onClick={() => handleEdit(product.id)}
-                  style={{
-                    width: "90px",
-                    padding: "8px",
-                    backgroundColor: "#facc15",
-                    color: "#000",
-                    border: "none",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                  }}
-                >
-                  ✏️ Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(product.id)}
-                  style={{
-                    width: "90px",
-                    padding: "8px",
-                    backgroundColor: "#ef4444",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                  }}
-                >
-                  ❌ Delete
-                </button>
-              </div>
-            </Card>
-
-          ))
-        )}
+        <Row className="mt-5 px-4">
+          <AnimatePresence>
+            {products.length === 0 ? (
+              <Col>
+                <Alert variant="info" className="text-center">
+                  Not yet have product!
+                </Alert>
+              </Col>
+            ) : (
+              products.map((product, i) => (
+                <Col key={product.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                  <motion.div
+                    custom={i}
+                    initial="hidden"
+                    animate="visible"
+                    variants={cardVariants}
+                  >
+                    <Card className="h-100 shadow-sm d-flex flex-column">
+                      <Card.Img
+                        variant="top"
+                        src={
+                          product.img_pro
+                            ? `http://localhost:5000/api/uploads/${product.img_pro}`
+                            : "https://via.placeholder.com/400x180?text=No+Image"
+                        }
+                        alt={product.name}
+                        style={{ objectFit: "cover", height: "180px", flexShrink: 0 }}
+                      />
+                      <Card.Body className="d-flex flex-column flex-grow-1">
+                        <Card.Title>{product.name}</Card.Title>
+                        <Card.Text
+                          className="text-muted"
+                          style={{
+                            fontSize: "0.9rem",
+                            whiteSpace: "normal",
+                            wordBreak: "break-word",
+                            marginBottom: "auto",
+                          }}
+                        >
+                          {product.description || "No description"}
+                        </Card.Text>
+                        <Card.Text className="mb-2 text-primary fw-bold" style={{ fontSize: "1.25rem" }}>
+                          ${product.price}
+                        </Card.Text>
+                        <div className="d-flex justify-content-end gap-2 mt-auto">
+                          <Button variant="warning" size="sm" onClick={() => handleEdit(product.id)}>
+                            ✏️ Edit
+                          </Button>
+                          <Button variant="danger" size="sm" onClick={() => handleDelete(product.id)}>
+                            ❌ Delete
+                          </Button>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </motion.div>
+                </Col>
+              ))
+            )}
+          </AnimatePresence>
+        </Row>
       </div>
-
-
-
 
     </div>
 
