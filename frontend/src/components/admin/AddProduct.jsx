@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from 'sweetalert2';
+
 
 function AddProduct() {
   const [form, setForm] = useState({
@@ -59,7 +61,14 @@ function AddProduct() {
         withCredentials: true, // Optional: if you're using sessions/cookies
       });
 
-      alert("✅ Product created successfully!");
+      // alert("✅ Product created successfully!");
+      Swal.fire({
+        icon: 'success',
+        title: 'Product Created!',
+        text: '✅ Product created successfully!',
+        showConfirmButton: false,
+        timer: 2000
+      });
       // Reset form
       setForm({
         name: "",
@@ -81,120 +90,130 @@ function AddProduct() {
   };
 
   return (
-    <div className="container my-5">
-      <div className="card shadow-sm">
-        <div className="card-header bg-primary text-white text-center">
-          <h3>Add New Product</h3>
-        </div>
-        <form onSubmit={handleSubmit} className="card-body">
-          <div className="row g-3">
+    <div style={{
+      height: '70vh',
+      overflowY: 'auto',
+      padding: '0 1rem',
+    }}>
+      <div className="container my-5">
+        <div className="card shadow-sm">
+          <div className="card-header bg-primary text-white text-center">
+            <h3>Add New Product</h3>
+          </div>
+          <form onSubmit={handleSubmit} className="card-body">
+            <div className="row g-3">
 
-            {/* Image Upload */}
-            <div className="col-12">
-              <label className="form-label">Product Image</label>
-              <input
-                type="file"
-                name="img_pro"
-                accept="image/*"
-                onChange={handleChange}
-                className="form-control"
-              />
-            </div>
-
-            {/* Preview */}
-            {previewImg && (
-              <div className="col-12 text-center">
-                <img
-                  src={previewImg}
-                  alt="Preview"
-                  className="img-thumbnail mt-3"
-                  style={{ maxHeight: "250px" }}
+              {/* Image Upload */}
+              <div className="col-12">
+                <label className="form-label">Product Image</label>
+                <input
+                  type="file"
+                  name="img_pro"
+                  accept="image/*"
+                  onChange={handleChange}
+                  className="form-control"
                 />
               </div>
-            )}
 
-            {/* Name */}
-            <div className="col-md-6">
-              <label className="form-label">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
+              {/* Preview */}
+              {previewImg && (
+                <div className="col-12 text-center">
+                  <img
+                    src={previewImg}
+                    alt="Preview"
+                    className="img-thumbnail mt-3"
+                    style={{ maxHeight: "250px" }}
+                  />
+                </div>
+              )}
+
+              {/* Name */}
+              <div className="col-md-6">
+                <label className="form-label">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+
+              {/* Price */}
+              <div className="col-md-6">
+                <label className="form-label">Price ($)</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={form.price}
+                  onChange={handleChange}
+                  className="form-control"
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+
+              {/* Stock */}
+              <div className="col-md-6">
+                <label className="form-label">Stock Quantity</label>
+                <input
+                  type="number"
+                  name="stock_quantity"
+                  value={form.stock_quantity}
+                  onChange={handleChange}
+                  className="form-control"
+                  min="0"
+                  required
+                />
+              </div>
+
+              {/* Category */}
+              <div className="col-md-6">
+                <label className="form-label">Category</label>
+                <select
+                  name="category_id"
+                  value={form.category_id}
+                  onChange={handleChange}
+                  className="form-select"
+                  required
+                >
+                  <option value="">-- Select Category --</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Description */}
+              <div className="col-12">
+                <label className="form-label">Description</label>
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  className="form-control"
+                  rows="3"
+                />
+              </div>
             </div>
 
-            {/* Price */}
-            <div className="col-md-6">
-              <label className="form-label">Price ($)</label>
-              <input
-                type="number"
-                name="price"
-                value={form.price}
-                onChange={handleChange}
-                className="form-control"
-                min="0"
-                step="0.01"
-                required
-              />
+            <div className="text-center mt-4">
+              <button type="submit" className="btn btn-primary px-5">
+                Create Product
+              </button>
             </div>
-
-            {/* Stock */}
-            <div className="col-md-6">
-              <label className="form-label">Stock Quantity</label>
-              <input
-                type="number"
-                name="stock_quantity"
-                value={form.stock_quantity}
-                onChange={handleChange}
-                className="form-control"
-                min="0"
-                required
-              />
-            </div>
-
-            {/* Category */}
-            <div className="col-md-6">
-              <label className="form-label">Category</label>
-              <select
-                name="category_id"
-                value={form.category_id}
-                onChange={handleChange}
-                className="form-select"
-                required
-              >
-                <option value="">-- Select Category --</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Description */}
-            <div className="col-12">
-              <label className="form-label">Description</label>
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                className="form-control"
-                rows="3"
-              />
-            </div>
-          </div>
-
-          <div className="text-center mt-4">
-            <button type="submit" className="btn btn-primary px-5">
-              Create Product
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
+
+
+
+
   );
 }
 
