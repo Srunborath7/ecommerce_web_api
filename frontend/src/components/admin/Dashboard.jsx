@@ -249,29 +249,33 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Summary boxes */}
-        <div style={summaryContainerStyle}>
-          <div style={productsBoxStyle}>
-            Products Count
-            <div style={{ fontSize: '2rem', marginTop: '8px' }}>{productCount}</div>
-          </div>
+        {/* Only show summary and users list on main /dashboard path */}
+        {location.pathname === '/dashboard' && (
+          <>
+            <div style={summaryContainerStyle}>
+              <div style={productsBoxStyle}>
+                Products Count
+                <div style={{ fontSize: '2rem', marginTop: '8px' }}>{productCount}</div>
+              </div>
 
-          <div style={totalPriceBoxStyle}>
-            Total Price
-            <div style={{ fontSize: '2rem', marginTop: '8px' }}>
-              ${totalPrice.toFixed(2)}
+              <div style={totalPriceBoxStyle}>
+                Total Price
+                <div style={{ fontSize: '2rem', marginTop: '8px' }}>
+                  ${totalPrice.toFixed(2)}
+                </div>
+              </div>
+
+              <div style={usersBoxStyle}>
+                Users Count
+                <div style={{ fontSize: '2rem', marginTop: '8px' }}>{userCount}</div>
+              </div>
             </div>
-          </div>
 
-          <div style={usersBoxStyle}>
-            Users Count
-            <div style={{ fontSize: '2rem', marginTop: '8px' }}>{userCount}</div>
-          </div>
-        </div>
-
-        <div>
-          <UsersList />
-        </div>
+            <div>
+              <UsersList />
+            </div>
+          </>
+        )}
 
         <Outlet />
       </main>
