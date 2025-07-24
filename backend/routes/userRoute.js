@@ -210,5 +210,30 @@ user.post('/profile/update', upload.single('profile_picture'), (req, res) => {
     );
   });
 });
+user.get('/count-role-3', (req, res) => {
+  const sql = "SELECT COUNT(*) AS user_count FROM users WHERE role_id = 3";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Count users error:', err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+    res.status(200).json({ count: results[0].user_count });
+  });
+});
+user.get('/all-users', (req, res) => {
+  const sql = `
+    SELECT users.id, username, email, roles.role_name AS role, created_at
+    FROM users
+    LEFT JOIN roles ON users.role_id = roles.id
+    ORDER BY users.id ASC
+  `;
 
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching users:', err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+    res.json(results);
+  });
+});
 module.exports = user;

@@ -13,6 +13,7 @@ function createInventoryTable() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+      
       FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
     );
   `;

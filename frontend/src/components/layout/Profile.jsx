@@ -117,13 +117,6 @@ const Profile = ({ isLoggedIn, onLogin, onRegister, onProfile }) => {
 
   return (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      {!user?.id && (
-        <>
-          <button onClick={onLogin}>Login</button>
-          <button onClick={onRegister}>Register</button>
-        </>
-      )}
-
       {user?.id && (
         <div onClick={handleProfileClick} style={{ cursor: 'pointer' }}>
           <img

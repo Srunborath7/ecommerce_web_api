@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Swal from 'sweetalert2';
-
+import Swal from "sweetalert2";
 
 function AddProduct() {
   const [form, setForm] = useState({
     name: "",
     price: "",
     description: "",
-    stock_quantity: "",
+    initial_quantity: "",  // renamed from stock_quantity
     category_id: "",
     img_pro: null,
   });
@@ -49,7 +48,7 @@ function AddProduct() {
       formData.append(key, form[key]);
     }
 
-    // Add created_by from localStorage
+    // Add created_by from localStorage (optional)
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser?.id) {
       formData.append("created_by", storedUser.id);
@@ -58,43 +57,40 @@ function AddProduct() {
     try {
       await axios.post("http://localhost:5000/api/products", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true, // Optional: if you're using sessions/cookies
+        withCredentials: true,
       });
 
-      // alert("✅ Product created successfully!");
       Swal.fire({
-        icon: 'success',
-        title: 'Product Created!',
-        text: '✅ Product created successfully!',
+        icon: "success",
+        title: "Product Created!",
+        text: "✅ Product created successfully!",
         showConfirmButton: false,
-        timer: 2000
+        timer: 2000,
       });
-      // Reset form
+
       setForm({
         name: "",
         price: "",
         description: "",
-        stock_quantity: "",
+        initial_quantity: "", // reset here too
         category_id: "",
         img_pro: null,
       });
       setPreviewImg(null);
-
     } catch (err) {
       console.error("❌ Error creating product:", err.response?.data || err.message);
 
-      // Optional: Show detailed error from server if available
       const message = err.response?.data?.message || "Failed to create product. Please try again.";
-      alert(`❌ Error: ${message}`);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: message,
+      });
     }
   };
 
   return (
-    <div style={{
-      height: '70vh',
-      overflowY: 'auto',
-      padding: '0 1rem',
-    }}>
+    <div style={{ height: "70vh", overflowY: "auto", padding: "0 1rem" }}>
       <div className="container my-5">
         <div className="card shadow-sm">
           <div className="card-header bg-primary text-white text-center">
@@ -102,7 +98,6 @@ function AddProduct() {
           </div>
           <form onSubmit={handleSubmit} className="card-body">
             <div className="row g-3">
-
               {/* Image Upload */}
               <div className="col-12">
                 <label className="form-label">Product Image</label>
@@ -155,17 +150,16 @@ function AddProduct() {
                 />
               </div>
 
-              {/* Stock */}
+              {/* Initial Quantity */}
               <div className="col-md-6">
-                <label className="form-label">Stock Quantity</label>
+                <label className="form-label">Initial Quantity</label>
                 <input
                   type="number"
-                  name="stock_quantity"
-                  value={form.stock_quantity}
+                  name="initial_quantity"
+                  value={form.initial_quantity}
                   onChange={handleChange}
                   className="form-control"
                   min="0"
-                  required
                 />
               </div>
 
@@ -210,10 +204,6 @@ function AddProduct() {
         </div>
       </div>
     </div>
-
-
-
-
   );
 }
 

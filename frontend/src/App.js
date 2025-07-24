@@ -22,7 +22,6 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<h2>Dashboard Work</h2>} />
             <Route path="products" element={<Products />} />
             <Route path="add" element={<AddProduct />} />
             <Route path="category" element={<Category />} />

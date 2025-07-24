@@ -14,9 +14,9 @@ import Swal from "sweetalert2";
 
 export default function Inventory() {
   const [inventory, setInventory] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     product_id: "",
@@ -25,9 +25,11 @@ export default function Inventory() {
     description: "",
   });
   const [editId, setEditId] = useState(null);
+  const [currentStock, setCurrentStock] = useState(0);
 
   useEffect(() => {
     fetchInventory();
+    fetchProducts();
   }, []);
 
   const fetchInventory = () => {
@@ -38,15 +40,22 @@ export default function Inventory() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Fetch error:", err);
-        setError("⚠️ Failed to load inventory data. Are you logged in?");
+        setError("Failed to load inventory data.");
         setLoading(false);
       });
+  };
+
+  const fetchProducts = () => {
+    axios
+      .get("http://localhost:5000/api/products", { withCredentials: true })
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.error("Fetch products failed:", err));
   };
 
   const handleOpen = () => {
     setFormData({ product_id: "", quantity: "", action: "IN", description: "" });
     setEditId(null);
+    setCurrentStock(0);
     setShowModal(true);
   };
 
@@ -54,82 +63,81 @@ export default function Inventory() {
     setShowModal(false);
     setFormData({ product_id: "", quantity: "", action: "IN", description: "" });
     setEditId(null);
+    setCurrentStock(0);
   };
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+
+    if (name === "product_id") {
+      const product = products.find((p) => p.id.toString() === value);
+      setCurrentStock(product ? product.stock_quantity : 0);
+      setFormData((prev) => ({ ...prev, [name]: value, quantity: "" }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async () => {
+    if (!formData.product_id || !formData.quantity || !formData.action) {
+      return Swal.fire("Missing fields", "Please fill in all fields", "error");
+    }
+    if (parseInt(formData.quantity) <= 0) {
+      return Swal.fire("Invalid quantity", "Quantity must be > 0", "error");
+    }
+    if (formData.action === "OUT" && parseInt(formData.quantity) > currentStock) {
+      return Swal.fire("Invalid quantity", `Max allowed is ${currentStock}`, "error");
+    }
+
     const url = editId
       ? `http://localhost:5000/api/inventory/${editId}`
       : "http://localhost:5000/api/inventory";
-
     const method = editId ? "put" : "post";
 
     try {
       await axios[method](url, formData, { withCredentials: true });
       handleClose();
       fetchInventory();
-      Swal.fire({
-        icon: "success",
-        title: editId ? "Updated!" : "Added!",
-        text: `Inventory entry ${editId ? "updated" : "added"} successfully.`,
-        timer: 1500,
-        showConfirmButton: false,
-      });
+      fetchProducts();
+      Swal.fire("Success", `Inventory ${editId ? "updated" : "added"}`, "success");
     } catch (err) {
-      console.error("Submit error:", err);
-      Swal.fire({
-        icon: "error",
-        title: "Failed!",
-        text: "❌ Failed to submit data.",
-      });
+      Swal.fire("Error", "Submission failed", "error");
     }
   };
 
   const handleEdit = (item) => {
     setFormData({
-      product_id: item.product_id,
-      quantity: item.quantity,
+      product_id: item.product_id.toString(),
+      quantity: item.quantity.toString(),
       action: item.action,
-      description: item.description,
+      description: item.description || "",
     });
     setEditId(item.id);
+    const product = products.find((p) => p.id === item.product_id);
+    setCurrentStock(product ? product.stock_quantity : 0);
     setShowModal(true);
   };
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "Do you really want to delete this inventory entry?",
+      text: "Delete this inventory entry?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
     });
-
     if (result.isConfirmed) {
       try {
         await axios.delete(`http://localhost:5000/api/inventory/${id}`, {
           withCredentials: true,
         });
         fetchInventory();
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: "Inventory entry deleted successfully.",
-          timer: 1500,
-          showConfirmButton: false,
-        });
-      } catch (err) {
-        console.error("Delete error:", err);
-        Swal.fire({
-          icon: "error",
-          title: "Delete failed",
-          text: "❌ Delete failed.",
-        });
+        fetchProducts();
+        Swal.fire("Deleted", "Inventory entry deleted", "success");
+      } catch {
+        Swal.fire("Failed", "Could not delete entry", "error");
       }
     }
   };
@@ -137,55 +145,60 @@ export default function Inventory() {
   return (
     <Container className="my-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>📦 Inventory History</h2>
-        <Button onClick={handleOpen}>➕ Add Inventory</Button>
+        <h2>Inventory</h2>
+        <Button onClick={handleOpen}>Add Inventory</Button>
       </div>
 
-      {loading && <Spinner animation="border" variant="primary" />}
-      {error && <Alert variant="danger">{error}</Alert>}
+      {loading && <Spinner animation="border" />} {error && <Alert variant="danger">{error}</Alert>}
 
       {!loading && !error && (
         <Table striped bordered hover responsive>
           <thead className="table-dark">
             <tr>
               <th>#</th>
-              <th>Product</th>
-              <th>Qty</th>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Stock</th>
               <th>Action</th>
+              <th>Price</th>
+              <th>Total</th>
               <th>Description</th>
               <th>User</th>
               <th>Date</th>
-              <th>🛠️</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {inventory.map((item, index) => (
-              <tr
-                key={item.id}
-                onClick={() => handleEdit(item)}
-                style={{ cursor: "pointer" }}
-              >
-                <td>{index + 1}</td>
-                <td>{item.product_name}</td>
-                <td>{item.quantity}</td>
+            {inventory.map((item, i) => (
+              <tr key={item.id} onClick={() => handleEdit(item)} style={{ cursor: "pointer" }}>
+                <td>{i + 1}</td>
                 <td>
-                  <Badge bg={item.action === "IN" ? "success" : "danger"}>
-                    {item.action}
-                  </Badge>
+                  <img
+                    src={`http://localhost:5000/uploads/${item.img_pro}`}
+                    alt="Product"
+                    width="50"
+                  />
                 </td>
-                <td>{item.description || "N/A"}</td>
+                <td>{item.product_name}</td>
+                <td>{item.stock_quantity}</td>
+                <td>
+                  <Badge bg={item.action === "IN" ? "success" : "danger"}>{item.action}</Badge>
+                </td>
+                <td>${item.price}</td>
+                <td>${(item.stock_quantity * item.price).toFixed(2)}</td>
+                <td>{item.description || "-"}</td>
                 <td>{item.user || "System"}</td>
                 <td>{new Date(item.created_at).toLocaleString()}</td>
                 <td>
                   <Button
-                    variant="danger"
                     size="sm"
+                    variant="danger"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(item.id);
                     }}
                   >
-                    🗑️
+                    Delete
                   </Button>
                 </td>
               </tr>
@@ -194,22 +207,23 @@ export default function Inventory() {
         </Table>
       )}
 
-      {/* Create/Edit Modal */}
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{editId ? "✏️ Edit Inventory" : "➕ Add Inventory"}</Modal.Title>
+          <Modal.Title>{editId ? "Edit Inventory" : "Add Inventory"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Product ID</Form.Label>
-              <Form.Control
-                type="number"
-                name="product_id"
-                value={formData.product_id}
-                onChange={handleChange}
-                required
-              />
+              <Form.Label>Product</Form.Label>
+              <Form.Select name="product_id" value={formData.product_id} onChange={handleChange}>
+                <option value="">-- Select Product --</option>
+                {products.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} (Stock: {p.stock_quantity})
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Text>Stock: {currentStock}</Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -219,15 +233,15 @@ export default function Inventory() {
                 name="quantity"
                 value={formData.quantity}
                 onChange={handleChange}
-                required
+                min="1"
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Action</Form.Label>
               <Form.Select name="action" value={formData.action} onChange={handleChange}>
-                <option value="IN">IN (Add)</option>
-                <option value="OUT">OUT (Remove)</option>
+                <option value="IN">IN</option>
+                <option value="OUT" disabled={currentStock <= 0}>OUT</option>
               </Form.Select>
             </Form.Group>
 
@@ -243,12 +257,8 @@ export default function Inventory() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            {editId ? "Update" : "Save"}
-          </Button>
+          <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+          <Button variant="primary" onClick={handleSubmit}>{editId ? "Update" : "Save"}</Button>
         </Modal.Footer>
       </Modal>
     </Container>
