@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import Profile from '../layout/Profile';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import UsersList from './UsersList';
+import OrdersTable from './OrdersTable';
 
 function Dashboard() {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -270,7 +271,9 @@ function Dashboard() {
                 <div style={{ fontSize: '2rem', marginTop: '8px' }}>{userCount}</div>
               </div>
             </div>
-
+            <div>
+              <OrdersTable />
+            </div>
             <div>
               <UsersList />
             </div>
