@@ -5,7 +5,7 @@ const Sidebar = () => {
     <aside style={sidebarStyle}>
       <h2 style={{ marginBottom: '30px', fontSize: '22px' }}>Admin Panel</h2>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        <SidebarItem to="/dashboard/" icon={<FaTachometerAlt />} label="Dashboard" />
+        <SidebarItem to="/dashboard" icon={<FaTachometerAlt />} label="Dashboard" />
         <SidebarItem to="/dashboard/category" icon={<FaTags />} label="Category" />
         <SidebarItem to="/dashboard/products" icon={<FaBox />} label="Products" />
         <SidebarItem to="/dashboard/add" icon={<FaPlus />} label="Add Product" />
