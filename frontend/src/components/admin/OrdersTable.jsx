@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 function OrdersTable() {
   const [orders, setOrders] = useState([]);
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+
+  const rowsPerPage = 10;
 
   useEffect(() => {
     async function fetchOrders() {
@@ -21,9 +25,42 @@ function OrdersTable() {
     fetchOrders();
   }, []);
 
+  const filteredOrders = orders.filter(order =>
+    order.username?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  const goToPage = page => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
+
   return (
     <div style={{ padding: '20px', overflowX: 'auto' }}>
       <h2>Orders</h2>
+
+      {/* Search input */}
+      <input
+        type="text"
+        placeholder="Search by username"
+        value={search}
+        onChange={e => {
+          setSearch(e.target.value);
+          setCurrentPage(1);
+        }}
+        style={{
+          marginBottom: '15px',
+          padding: '8px 12px',
+          width: '250px',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+        }}
+      />
+
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead style={{ backgroundColor: '#f0f0f0' }}>
           <tr>
@@ -37,7 +74,7 @@ function OrdersTable() {
           </tr>
         </thead>
         <tbody>
-          {orders.map(order => (
+          {paginatedOrders.map(order => (
             <tr key={order.id} style={trStyle}>
               <td style={tdStyle}>{order.id}</td>
               <td style={tdStyle}>{order.username}</td>
@@ -55,7 +92,7 @@ function OrdersTable() {
               </td>
             </tr>
           ))}
-          {orders.length === 0 && (
+          {paginatedOrders.length === 0 && (
             <tr>
               <td colSpan={7} style={{ textAlign: 'center', padding: '10px' }}>
                 No orders found.
@@ -64,6 +101,37 @@ function OrdersTable() {
           )}
         </tbody>
       </table>
+
+      {/* Pagination controls */}
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <button
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          style={paginationBtn}
+        >
+          Prev
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            onClick={() => goToPage(i + 1)}
+            style={{
+              ...paginationBtn,
+              backgroundColor: currentPage === i + 1 ? '#0d6efd' : '#f0f0f0',
+              color: currentPage === i + 1 ? '#fff' : '#000',
+            }}
+          >
+            {i + 1}
+          </button>
+        ))}
+        <button
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          style={paginationBtn}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
@@ -90,6 +158,14 @@ const buttonStyle = {
   border: 'none',
   color: '#fff',
   borderRadius: '4px',
+  cursor: 'pointer',
+};
+
+const paginationBtn = {
+  margin: '0 5px',
+  padding: '6px 12px',
+  borderRadius: '4px',
+  border: '1px solid #ccc',
   cursor: 'pointer',
 };
 

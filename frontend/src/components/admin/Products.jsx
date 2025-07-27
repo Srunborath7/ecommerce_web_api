@@ -262,11 +262,23 @@ function ProductPage() {
                         src={
                           product.img_pro
                             ? `http://localhost:5000/api/uploads/${product.img_pro}`
-                            : "https://via.placeholder.com/400x180?text=No+Image"
+                            : "https://source.unsplash.com/400x180/?product,store"
                         }
                         alt={product.name}
-                        style={{ objectFit: "cover", height: "180px", flexShrink: 0 }}
+                        style={{
+                          height: "180px",
+                          width: "100%",
+                          objectFit: "contain", // <-- changed
+                          backgroundColor: "#f3f4f6", // light gray background
+                          borderTopLeftRadius: "0.5rem",
+                          borderTopRightRadius: "0.5rem",
+                          padding: "10px", // optional: gives space around the image
+                          transition: "transform 0.3s ease-in-out",
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                        onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
                       />
+
                       <Card.Body className="d-flex flex-column flex-grow-1">
                         <Card.Title>{product.name}</Card.Title>
                         <Card.Text

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+
 import { Container, Row, Col, Button, Carousel } from "react-bootstrap";
 import img1 from "../../assets/hero1.jpg";
 import img2 from "../../assets/hero2.jpg";

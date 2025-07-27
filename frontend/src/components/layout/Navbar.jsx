@@ -5,7 +5,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import Profile from "./Profile"; // Your profile component
 import { useCart } from "../layout/CartContext";
 import { Link } from "react-router-dom";
-
+import Logo from "../../assets/logo.png";
 export default function AppNavbar() {
   const [showCartModal, setShowCartModal] = useState(false);
   const { cartItems, removeFromCart } = useCart();
@@ -22,8 +22,28 @@ export default function AppNavbar() {
     <>
       <Navbar expand="md" sticky="top" className="mb-4 py-3 shadow-sm" style={{ backgroundColor: "#fef6f0", borderBottom: "1px solid #eee" }}>
         <Container>
-          <Navbar.Brand href="/ecommerce" style={{ fontSize: "28px", fontWeight: "bold", color: "#6d4c41" }}>
-            🌿 PureGlow
+          <Navbar.Brand href="/ecommerce" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <img
+              src={Logo}
+              alt="Logo"
+              style={{
+                width: "60px",
+                height: "60px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.2)"
+              }}
+            />
+            <div style={{ lineHeight: "1.2" }}>
+              <span style={{ fontSize: "22px", fontWeight: "bold", color: "#6d4c41" }}>
+                ECommerce
+              </span>
+              <br />
+              <span style={{ fontSize: "16px", color: "#8d6e63" }}>
+                Skin Care
+              </span>
+            </div>
+
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="main-navbar" />
           <Navbar.Collapse id="main-navbar">
@@ -43,7 +63,7 @@ export default function AppNavbar() {
               </Nav.Link>
             </Nav>
 
-            <Profile isLoggedIn={true} onLogin={() => {}} onRegister={() => {}} onProfile={() => {}} />
+            <Profile isLoggedIn={true} onLogin={() => { }} onRegister={() => { }} onProfile={() => { }} />
           </Navbar.Collapse>
         </Container>
       </Navbar>

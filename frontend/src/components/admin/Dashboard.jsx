@@ -6,7 +6,7 @@ import Profile from '../layout/Profile';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import UsersList from './UsersList';
 import OrdersTable from './OrdersTable';
-
+import ContactMessages from './ContactMessages';
 function Dashboard() {
   const user = JSON.parse(localStorage.getItem('user'));
   const location = useLocation();
@@ -272,9 +272,15 @@ function Dashboard() {
               </div>
             </div>
             <div>
+              <h4 className="mb-4">Recent Contact Messages</h4>
+              <ContactMessages />
+            </div>
+            <div>
+              <h4 className="mb-4">Recent Orders</h4>
               <OrdersTable />
             </div>
             <div>
+              <h4 className="mb-4">Users List</h4>
               <UsersList />
             </div>
           </>

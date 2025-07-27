@@ -1,3 +1,4 @@
+// src/components/layout/Footer.jsx
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import {
@@ -30,16 +31,25 @@ export default function AppFooter() {
     marginRight: "10px",
   };
 
+  const socialLinkStyle = {
+    color: "#6d4c41",
+    fontSize: "18px",
+    marginRight: "15px",
+    textDecoration: "none",
+  };
+
   return (
     <footer style={footerStyle}>
       <Container>
         <Row>
           {/* About */}
           <Col md={4} className="mb-4">
-            <h5 style={headingStyle}>About PureGlow</h5>
+            <h5 style={headingStyle}>About Ecommerce Skincare</h5>
             <p>
-              PureGlow is your trusted source for natural skincare products. We
-              believe beauty starts with pure ingredients and radiant confidence.
+              Ecommerce skincare have a lot of brand inspired by the softness of velvet and the simplicity of clean beauty. 
+              With a focus on minimal ingredients and luxurious textures, Velveta offers a gentle yet effective skincare 
+              experience that enhances your natural glow.
+
             </p>
           </Col>
 
@@ -64,9 +74,30 @@ export default function AppFooter() {
           <Col md={4} className="mb-4">
             <h5 style={headingStyle}>Follow Us</h5>
             <div className="d-flex gap-3">
-              <a href="#" style={iconStyle}><FaFacebookF /></a>
-              <a href="#" style={iconStyle}><FaInstagram /></a>
-              <a href="#" style={iconStyle}><FaTwitter /></a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={socialLinkStyle}
+              >
+                <FaFacebookF />
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={socialLinkStyle}
+              >
+                <FaInstagram />
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={socialLinkStyle}
+              >
+                <FaTwitter />
+              </a>
             </div>
           </Col>
         </Row>
@@ -75,7 +106,7 @@ export default function AppFooter() {
 
         <Row>
           <Col className="text-center pt-2" style={{ fontSize: "14px", color: "#777" }}>
-            &copy; {new Date().getFullYear()} PureGlow. All rights reserved.
+            &copy; {new Date().getFullYear()} All rights reserved.
           </Col>
         </Row>
       </Container>
